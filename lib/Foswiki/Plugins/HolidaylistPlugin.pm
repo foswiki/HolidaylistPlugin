@@ -2,7 +2,7 @@
 #
 # Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 # Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
-# Copyright (C) 2005-2008 Daniel Rohde
+# Copyright (C) 2005-2009 Daniel Rohde
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,40 +16,6 @@
 # http://www.gnu.org/copyleft/gpl.html
 #
 # =========================
-#
-# This is an empty Foswiki plugin. Use it as a template
-# for your own plugins; see %SYSTEMWEB%.Plugins for details.
-#
-# Each plugin is a package that may contain these functions:        VERSION:
-#
-#   earlyInitPlugin         ( )                                     1.020
-#   initPlugin              ( $topic, $web, $user, $installWeb )    1.000
-#   initializeUserHandler   ( $loginName, $url, $pathInfo )         1.010
-#   registrationHandler     ( $web, $wikiName, $loginName )         1.010
-#   beforeCommonTagsHandler ( $text, $topic, $web )                 1.024
-#   commonTagsHandler       ( $text, $topic, $web )                 1.000
-#   afterCommonTagsHandler  ( $text, $topic, $web )                 1.024
-#   startRenderingHandler   ( $text, $web )                         1.000
-#   outsidePREHandler       ( $text )                               1.000
-#   insidePREHandler        ( $text )                               1.000
-#   endRenderingHandler     ( $text )                               1.000
-#   beforeEditHandler       ( $text, $topic, $web )                 1.010
-#   afterEditHandler        ( $text, $topic, $web )                 1.010
-#   beforeSaveHandler       ( $text, $topic, $web )                 1.010
-#   afterSaveHandler        ( $text, $topic, $web, $errors )        1.020
-#   writeHeaderHandler      ( $query )                              1.010  Use only in one Plugin
-#   redirectCgiQueryHandler ( $query, $url )                        1.010  Use only in one Plugin
-#   getSessionValueHandler  ( $key )                                1.010  Use only in one Plugin
-#   setSessionValueHandler  ( $key, $value )                        1.010  Use only in one Plugin
-#
-# initPlugin is required, all other are optional. 
-# For increased performance, all handlers except initPlugin are
-# disabled. To enable a handler remove the leading DISABLE_ from
-# the function name. Remove disabled handlers you do not need.
-#
-# NOTE: To interact with Foswiki use the official Foswiki functions 
-# in the Foswiki::Func module. Do not reference any functions or
-# variables elsewhere in Foswiki!!
 
 
 # =========================
@@ -81,17 +47,17 @@ use vars qw(
 	%rendererCache
     );
 
-# This should always be $Rev: 17715 $ so that Foswiki can determine the checked-in
+# This should always be $Rev: 17873 $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 17715 $';
+$VERSION = '$Rev: 17873 $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
 # of the version number in PLUGINDESCRIPTIONS.
 
-#$REVISION = '1.0.28'; Rebranded to Foswiki
-#$REVISION = '1.0.27'; #dro# changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute
+
+$REVISION = '1.0.29'; #dro# changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields
 #$REVISION = '1.0.26'; #dro# added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row)
 #$REVISION = '1.0.25'; #dro# added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs;
 #$REVISION = '1.0.24'; #dro# added statistics feature requested by TWiki:Main.GarySprague
@@ -103,13 +69,13 @@ $VERSION = '$Rev: 17715 $';
 #$REVISION = '1.018'; #dro# fixed periodic event bug; added navigation feature
 #$REVISION = '1.017'; #dro# fixed minor bug (periodic repeater)
 #$REVISION = '1.016'; #dro# fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar)
-#$REVISION = '1.015'; #dro# added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen
-#$REVISION = '1.014'; #dro# incorporated documentation fixes by TWiki:Main.KennethLavrsen (Bugs:Item1440) 
+#$REVISION = '1.015'; #dro# added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by Foswiki:Main.KennethLavrsen
+#$REVISION = '1.014'; #dro# incorporated documentation fixes by Foswiki:Main.KennethLavrsen (Bugs:Item1440) 
 #$REVISION = '1.013'; #dro# added Perl strict pragma; 
 #$VERSION = '1.012'; #dro# added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli
 #$VERSION = '1.011'; #dro# improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg;
 #$VERSION = '1.010'; #dro# added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation
-#$VERSION = '1.009'; #dro# fixed major bug (WikiNames and forced links in names) reported by TWiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering
+#$VERSION = '1.009'; #dro# fixed major bug (WikiNames and forced links in names) reported by Foswiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering
 #$VERSION = '1.008'; #dro# added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in the month attribute
 #$VERSION = '1.007'; #dro# personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug
 #$VERSION = '1.006'; #dro# added new features (location support; todaybgcolor; todayfgcolor)
@@ -195,8 +161,8 @@ sub initDefaults() {
 		headerformat	=> '<font size="-2">%a<br/>%e</font>',	# format of the header
 		compatmode	=> 0,		# compatibility mode (allows all CalendarPlugin event types)
 		compatmodeicon	=> ':-)', 	# compatibility mode icon
-		daynames	=> undef,	# day names (overwrites lang attribute)
-		monthnames	=> undef,	# month names (overwrites lang attribute)
+		daynames	=> undef,	# day names (overrides lang attribute)
+		monthnames	=> undef,	# month names (overrides lang attribute)
 		width		=> undef,	# table width
 		unknownparamsmsg=> '%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see %SYSTEMWEB%.HolidaylistPlugin topic for more details): %KNOWNPARAMSLIST%',
 		enablepubholidays	=> 1,		# enable public holidays
@@ -1028,7 +994,7 @@ sub renderHolidaylist() {
 		$person =~ s/\@all//ig if $options{enablepubholidays};
 
 		my $tr = "";
-		my $pcell = CGI::th({-align=>'left'},'<noautolink>'._renderText($person,$web).'</noautolink>');
+		my $pcell = CGI::th({-align=>'left',-style=>'white-space:nowrap;text-wrap:none;'},'<noautolink>'._renderText($person,$web).'</noautolink>');
 		$tr .= $pcell if $options{namepos}=~/^(left|both)$/i;
 
 		for (my $i=0; $i<$options{days}; $i++) {
@@ -1076,6 +1042,9 @@ sub renderHolidaylist() {
 			$sumstatistics{days}++;
 			$sumstatistics{'days-w'}++ if $dow < 6;
 
+		
+			my $title = substTitle($person .' / '.Date_to_Text_Long($yy1,$mm1,$dd1));
+			my $fgcolor = undef;
 
                         if (($dow < 6)||$options{showweekends}) { 
 				my $icon= $iconstates{ defined $$ptableref[$i]?$$ptableref[$i]:0};
@@ -1119,25 +1088,29 @@ sub renderHolidaylist() {
 					$icon = _renderText($icon, $web) if $icon !~ /^(\s|\&nbsp\;)*$/;
 				}
 
-				# could fail if HTML::Entities is not installed:
-				eval { 
-					require HTML::Entities;
-					my $location = $$ltableref[$i]{descr} if defined $ltableref;
-					if (defined $location) {
-						$location =~ s/\@all//ig if $options{enablepubholidays}; # remove @all
+				my $location = $$ltableref[$i]{descr} if defined $ltableref;
+				if (defined $location) {
+					$location =~ s/\s*(\@all|(fg)?color\([^\)]+\))//ig if $options{enablepubholidays}; # remove @all
+					$location=substTitle($location);
+					$location=CGI::escapeHTML($location);
 
-						$location=substTitle($location);
-						$location=&HTML::Entities::encode_entities($location); # quote special characters like "<>
-
-						$icon=~s/<img /<img alt="$location" /is unless $icon=~s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
-						$icon=~s/<img /<img title="$location" /is unless $icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
-					}
-				};
-				$td.= $icon;
+					$icon=~s/<img /<img alt="$location" /is unless $icon=~s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
+					$icon=~s/<img /<img title="$location" /is unless $icon=~s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
+					$title=$location if defined $location;
+				}
+				if ($icon=~s/fgcolor\(([^\)]+)\)//g) {
+					$fgcolor = $1;
+				}
+				if ($icon=~s/color\(([^\)]+)\)//g) {
+					$bgcolor=$1;
+					$td.= ($icon!~/^\s*$/)?$icon:'&nbsp;';
+				} else {
+					$td.= $icon;
+				}
 			} else {
 				$td.= '&nbsp;';
 			}
-			$tr .= CGI::td({-align=>'center', -bgcolor=>$bgcolor, -title=>substTitle($person .' / '.Date_to_Text_Long($yy1,$mm1,$dd1)) }, $td);
+			$tr .= CGI::td({-align=>'center', -style=>(defined $fgcolor?"color:$fgcolor;":"")."background-color:$bgcolor;", -title=>$title }, $td);
 		}
 		$tr .= renderStatisticsCol(\%statistics) if ($options{showstatcol});
 		$tr .= $pcell if $options{namepos}=~/^(right|both)$/i;
@@ -1686,7 +1659,7 @@ sub _getOptionRange {
 sub _renderText {
 	my ($text, $web) = @_;
 	my $ret = $text;
-	if (defined $rendererCache{$web}{$text}) {
+	if (defined $rendererCache{$web} && defined $rendererCache{$web}{$text}) {
 		$ret = $rendererCache{$web}{$text};
 	} else {
 		$ret = Foswiki::Func::renderText($text, $web);

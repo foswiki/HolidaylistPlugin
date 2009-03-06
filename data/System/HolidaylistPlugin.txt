@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" date="1181041089" format="1.0" version="$Rev: 17715 $"}%
+%META:TOPICINFO{author="ProjectContributor" date="1181041089" format="1.0" version="$Rev: 17874 $"}%
 <!--
 This topic is part of the documentation for HolidaylistPlugin and is
 automatically generated from Subversion. Do not edit it! Your edits
@@ -43,7 +43,7 @@ Example3: To list that Jill will be in Paris from 10-Sep - 11-Sep 2005 and in To
 </verbatim>
 Example4: To list that Eve will be ill from 12-Sep - 20-Sep 2005  with her own 'smily'
 <verbatim>
-	* 12 Sep 2005 - 20 Sep 2005 - Eve - is ill - :skull:
+	* 12 Sep 2005 - 20 Sep 2005 - Eve - is ill - :skull: 
 </verbatim>
 Example5: To list that Lisa will by not at work from April to June and the complete December 2005:
 <verbatim>
@@ -90,6 +90,7 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 	* If you change the default language ('lang' attribute; see [[#AttriButes][Attributes]]) you can use your language specific month and day names or the abbreviations for any entry type (including Foswiki:Extensions.CalendarPlugin event types).
 	* If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can use it for your entries (including Foswiki:Extensions.CalendarPlugin event types).
 	* You can hide all calendar entries if you put them into HTML comments, e.g:
+	* You can define a background color in a icon field or icon attribute (workicon, ...) if you write =color(&lt;MYCOLOR&gt;)=, e.g. =&nbsp;&nbsp;&nbsp;* 5 Mar 2009 - Green Entry - anywhere - color(green)=. It is also possible to combine icon and background color, e.g. =&nbsp;&nbsp;&nbsp;* 6 Mar 2009 - Red Entry - somewhere - color(red) :skull:=.
 <verbatim>
 		%HOLIDAYLIST%
 		<!--
@@ -261,7 +262,7 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 	* 08 Jun 2005 - Bill
 	* 10 Jun 2005 - 15 Jun 2005 - Bob
 	* 12 Jun 2005 - 14 Jun 2005 - Alice - Paris
-	* 17 Jun 2005 - Bob - is ill - :skull:
+	* 17 Jun 2005 - Bob - is ill - :skull: color(red)
 	* 10 Jul 2005 - Mary
 	* 20 Jul 2005 - 02 Sep 2005 - Bob
 	* 15 Sep 2005 - 15 Oct 2005 - Mary
@@ -269,6 +270,7 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 	* 19 Nov 2005 - Bob
 	* 29 Nov 2005 - 20 Dec 2005 - Bill
 	* 25 Dec 2005 - Bob
+	* 6 Jun 2005 - 15 Jun 2005 - Kelly - Berlin - :-| color(red) fgcolor(white)
 
 ---++ Plugin Settings
 
@@ -303,7 +305,7 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 
 ---++ Plugin Installation Instructions
 
-	* Install required CPAN modules (e.g. =perl -MCPAN -e "install Date::Calc"= and =perl -MCPAN -e "install HTML::Entities"=)
+	* Install required CPAN modules (e.g. =perl -MCPAN -e "install Date::Calc"= )
 	* Download the ZIP file from the Plugin web (see below)
 	* Unzip ==%TOPIC%.zip== in your twiki installation directory. Content:
 | *File:* | *Description:* |
@@ -317,11 +319,9 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 ---++ Plugin Info
 
 |  Plugin Author: | TWiki:Main.PeterJones, TWiki:Main.DanielRohde |
-|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
-|  Plugin Version: | v1.028 (16 Dec 2008) |
+|  Plugin Version: | v1.029 (6 Mar 2009) |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  v1.028 (16 Dec 2008) | Foswiki:Main.KennethLavrsen: Rebranded to Foswiki |
-|  v1.027 (BETA) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute |
+|  v1.029 (6 Mar 2009) | TWiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |
 |  v1.026 (28 Oct 2008) | TWiki:Main.DanielRohde: added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row) |
 |  v1.025 (17 Oct 2008) | TWiki:Main.DanielRohde: added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs |
 |  v1.024 (29 Jul 2008) | TWiki:Main.DanielRohde: added statistics feature requested by TWiki:Main.GarySprague |
@@ -333,8 +333,8 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 |  v1.018 (25 Jul 2006) | TWiki:Main.DanielRohde: fixed periodic event bug; added navigation feature | 
 |  v1.017 (31 May 2006) | TWiki:Main.DanielRohde: fixed minor bug (periodic repeater) |
 |  v1.016 (27 Apr 2006) | TWiki:Main.DanielRohde: fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar) |
-|  v1.015 (9 Feb 2006) | TWiki:Main.DanielRohde: added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by TWiki:Main.KennethLavrsen |
-|  v1.014 (23 Jan 2006) | TWiki:Main.DanielRohde: incorporated documentation fixes by TWiki:Main.KennethLavrsen (Bugs:Item1440) | 
+|  v1.015 (9 Feb 2006) | TWiki:Main.DanielRohde: added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by Foswiki:Main.KennethLavrsen |
+|  v1.014 (23 Jan 2006) | TWiki:Main.DanielRohde: incorporated documentation fixes by Foswiki:Main.KennethLavrsen (Bugs:Item1440) | 
 |  v1.013 (8 Nov 2005) | TWiki:Main.DanielRohde: added Perl strict pragma; | 
 |  v1.012 (5 Sep 2005): | TWiki:Main.DanielRohde: added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli |
 |  v1.011 (11 Jul 2005): | TWiki:Main.DanielRohde: improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg |
@@ -349,9 +349,10 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 |  v1.002 (13 Jun 2005): | TWiki:Main.DanielRohde: renders some options; fixes some documentation bugs and a white space bug |
 |  v1.001 (10 Jun 2005): | TWiki:Main.DanielRohde: A complete reimplementation with many bug fixes and some new features. |
 |  v1.021 (01 Jun 2005): | TWiki:Main.PeterJones: Initial version |
-|  CPAN Dependencies: | *required:* CPAN:Date::Calc %BR% optional: CPAN:HTML::Entities |
+|  CPAN Dependencies: | *required:* CPAN:Date::Calc |
 |  Other Dependencies: | %SYSTEMWEB%.SmiliesPlugin |
 |  Perl Version: | 5.008 |
+|  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Plugin Home: | http://foswiki.org/Extensions/%TOPIC% |
 |  Feedback: | http://foswiki.org/Extensions/%TOPIC%Dev |
 
