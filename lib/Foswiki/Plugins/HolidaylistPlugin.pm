@@ -47,10 +47,10 @@ use vars qw(
 	%rendererCache
     );
 
-# This should always be $Rev: 18096 $ so that TWiki can determine the checked-in
+# This should always be $Rev: 18097 $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 18096 $';
+$VERSION = '$Rev: 18097 $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -1598,7 +1598,8 @@ sub expandIncludedEvents
 	# recursively expand includes:
 	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef )/geo;
 
-	# expand common variables (search and so on):
+	# expand common variables:
+	$text =~ s/%HOLIDAYLIST({[^}]*})?%//sg; ## prevent an endless recursion
 	$text = Foswiki::Func::expandCommonVariables($text, $theWeb, $theTopic);
 
 	return $text;
