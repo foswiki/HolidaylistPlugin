@@ -47,10 +47,10 @@ use vars qw(
 	%rendererCache
     );
 
-# This should always be $Rev: 18097 $ so that TWiki can determine the checked-in
+# This should always be $Rev: 18100 $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 18097 $';
+$VERSION = '$Rev: 18100 $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -1542,7 +1542,7 @@ sub getTopicText() {
 		}
 	}
 
-	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents($1, \@processedTopics)/geo;
+	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents($1, \@processedTopics, $web, $topic)/geo;
 	$text =~s/\%HOLIDAYLIST({(.*?)})?%//sg;
 	$text = Foswiki::Func::expandCommonVariables($text,$web,$topic);
 	
@@ -1566,13 +1566,11 @@ sub readTopicText
 # =========================
 sub expandIncludedEvents
 {
-	my( $theAttributes, $theProcessedTopicsRef ) = @_;
+	my( $theAttributes, $theProcessedTopicsRef, $theWeb, $theTopic ) = @_;
 
-	my ($theWeb, $theTopic) = ($web, $topic);
-
-	my $webTopic = Foswiki::Func::expandCommonVariables( Foswiki::Func::extractNameValuePair( $theAttributes ) );
-	my $section = Foswiki::Func::expandCommonVariables( Foswiki::Func::extractNameValuePair( $theAttributes, 'section') );
-	my $pattern = Foswiki::Func::expandCommonVariables( Foswiki::Func::extractNameValuePair( $theAttributes, 'pattern') );
+	my $webTopic = Foswiki::Func::expandCommonVariables( Foswiki::Func::extractNameValuePair( $theAttributes ), $theTopic, $theWeb );
+	my $section = Foswiki::Func::expandCommonVariables( Foswiki::Func::extractNameValuePair( $theAttributes, 'section'), $theTopic, $theWeb );
+	my $pattern = Foswiki::Func::expandCommonVariables( Foswiki::Func::extractNameValuePair( $theAttributes, 'pattern'), $theTopic, $theWeb );
 
 	
 	if( $webTopic =~ /^([^\.]+)[\.\/](.*)$/ ) {
@@ -1596,7 +1594,7 @@ sub expandIncludedEvents
 	$text = getTopicIncludeText($text);
 
 	# recursively expand includes:
-	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef )/geo;
+	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef, $theWeb, $theTopic )/geo;
 
 	# expand common variables:
 	$text =~ s/%HOLIDAYLIST({[^}]*})?%//sg; ## prevent an endless recursion
