@@ -47,10 +47,10 @@ use vars qw(
 	%rendererCache
     );
 
-# This should always be $Rev: 18101 $ so that TWiki can determine the checked-in
+# This should always be $Rev: 18102 $ so that TWiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 18101 $';
+$VERSION = '$Rev: 18102 $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -211,6 +211,7 @@ sub initDefaults() {
 		order => undef,
 		namepos => 'left',
 		maxheight => undef,
+		allowvarsininclude => 0,
 	);
 
 	# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
@@ -218,7 +219,7 @@ sub initDefaults() {
 
 	# options to turn or switch things on (1) or off (0)
 	# this special handling allows 'on'/'yes';'off'/'no' values additionally to '1'/'0'
-	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader','showstatcol', 'showstatrow','showstatsum','showoptions');
+	@flagOptions = ( 'showweekends', 'removeatwork', 'compatmode', 'enablepubholidays', 'showpubholidays', 'navenable','showmonthheader','showstatcol', 'showstatrow','showstatsum','showoptions','allowvarsininclude');
 
 	%months = ( Jan=>1, Feb=>2, Mar=>3, Apr=>4, May=>5, Jun=>6, 
 	            Jul=>7, Aug=>8, Sep=>9, Oct=>10, Nov=>11, Dec=>12 );
@@ -1542,15 +1543,50 @@ sub getTopicText() {
 		}
 	}
 
-	$text =~ s/%BASETOPIC%/${theTopic}/sg;
-	$text =~ s/%BASEWEB%/${theWeb}/sg;
-	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents($1, \@processedTopics, $web, $topic)/geo;
-	$text =~s/\%HOLIDAYLIST({(.*?)})?%//sg;
-	$text = Foswiki::Func::expandCommonVariables($text,$web,$topic);
+	$text = parseInclude($text, \@processedTopics);
+	$text =~s/\%HOLIDAYLIST({.*?})?%//sg;
+	$text = Foswiki::Func::expandCommonVariables($text,$topic,$web);
 
 	
 	return $text;
 	
+}
+sub parseInclude {
+	my ($text, $theProcessedTopicsRef) = @_;
+	
+	if ($options{allowvarsininclude}) { 
+		$text  =~ s/%INCLUDE{(.*)}%/parseIncludeOptions($1, $theProcessedTopicsRef )/ges;
+	} else {
+		$text  =~ s/%INCLUDE{(.*?)}%/expandIncludedEvents( $1, $theProcessedTopicsRef)/ges;
+	}
+
+	return $text;
+}
+
+sub parseIncludeOptions {
+	my ($behindincl, $theProcessedTopicsRef) = @_;
+
+	my($attributes, $rest)=("",$behindincl);
+
+	### mark vars:
+	$behindincl=~s/(%\w+{.*?})%/$1_____HLP____%/sg;
+
+	### extract attributes and rest:
+	$behindincl =~ /^(.*?)}%(.*)$/s;
+	($attributes, $rest) = ($1, $2);
+
+	### unmark vars:
+	$attributes =~ s/_____HLP____//sg;
+	$rest=~ s/_____HLP____//sg;
+
+	
+	### include text:
+	my $text = &expandIncludedEvents($attributes,$theProcessedTopicsRef, $web, $topic);
+
+	### handle INCLUDEs in rest:
+	$rest  =~ s/%INCLUDE{(.*)}%/parseIncludeOptions($1, $theProcessedTopicsRef, $web, $topic )/ges;
+
+	return $text.$rest.'}%';
 }
 
 # =========================
@@ -1569,13 +1605,15 @@ sub readTopicText
 # =========================
 sub expandIncludedEvents
 {
-	my( $theAttributes, $theProcessedTopicsRef, $web, $topic ) = @_;
+	my( $theAttributes, $theProcessedTopicsRef) = @_;
 
-	my $webTopic = Foswiki::Func::expandCommonVariables( Foswiki::Func::extractNameValuePair( $theAttributes ), $topic, $web );
-	my $section = Foswiki::Func::expandCommonVariables( Foswiki::Func::extractNameValuePair( $theAttributes, 'section'), $topic, $web );
-	my $pattern = Foswiki::Func::expandCommonVariables( Foswiki::Func::extractNameValuePair( $theAttributes, 'pattern'), $topic, $web );
+	$theAttributes = $options{allowvarsininclude}?  Foswiki::Func::expandCommonVariables( $theAttributes, $theTopic, $theWeb) : $theAttributes;
 
+	my $webTopic = Foswiki::Func::extractNameValuePair( $theAttributes );
+	my $section = Foswiki::Func::extractNameValuePair( $theAttributes, 'section');
+	my $pattern = Foswiki::Func::extractNameValuePair( $theAttributes, 'pattern');
 	
+	my ($topic,$web) = ($theTopic, $theWeb);
 	if( $webTopic =~ /^([^\.]+)[\.\/](.*)$/ ) {
 		$web = $1;
 		$topic = $2;
@@ -1596,16 +1634,8 @@ sub expandIncludedEvents
 
 	$text = getTopicIncludeText($text);
 
-	# fix base topic:
-	$text =~ s/%BASETOPIC%/${theTopic}/sg;
-	$text =~ s/%BASEWEB%/${theWeb}/sg;
-
 	# recursively expand includes:
-	$text =~ s/%INCLUDE{(.*?)}%/&expandIncludedEvents( $1, $theProcessedTopicsRef, $web, $topic )/geo;
-
-	# expand common variables:
-	$text =~ s/%HOLIDAYLIST({[^}]*})?%//sg; ## prevent an endless recursion
-	$text = Foswiki::Func::expandCommonVariables($text, $theWeb, $theTopic);
+	$text = parseInclude($text, $theProcessedTopicsRef);
 
 	return $text;
 }
