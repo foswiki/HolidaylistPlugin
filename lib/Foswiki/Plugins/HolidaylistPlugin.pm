@@ -47,10 +47,10 @@ use vars qw(
 	%rendererCache
     );
 
-# This should always be $Rev: 18103 $ so that TWiki can determine the checked-in
+# This should always be $Rev: 18212 $ so that Foswiki can determine the checked-in
 # status of the plugin. It is used by the build automation tools, so
 # you should leave it alone.
-$VERSION = '$Rev: 18103 $';
+$VERSION = '$Rev: 18212 $';
 
 # This is a free-form string you can use to "name" your own plugin version.
 # It is *not* used by the build automation tools, but is reported as part
@@ -69,8 +69,8 @@ $REVISION = '1.0.30'; #dro# improved INCLUDE support requested by Foswiki:Main.I
 #$REVISION = '1.019'; #dro# improved navigation; fixed %<nop>ICON% tag handling bug reported by TWiki:Main.UlfJastrow;
 #$REVISION = '1.018'; #dro# fixed periodic event bug; added navigation feature
 #$REVISION = '1.017'; #dro# fixed minor bug (periodic repeater)
-#$REVISION = '1.016'; #dro# fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Dakar)
-#$REVISION = '1.015'; #dro# added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and TWiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by Foswiki:Main.KennethLavrsen
+#$REVISION = '1.016'; #dro# fixed some major bugs: deep recursion bug reported by TWiki:Main.ChrisHausen; exception handling bug (concerns Foswiki)
+#$REVISION = '1.015'; #dro# added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx TWiki:Main.HaraldJoerg and Foswiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by Foswiki:Main.KennethLavrsen
 #$REVISION = '1.014'; #dro# incorporated documentation fixes by Foswiki:Main.KennethLavrsen (Bugs:Item1440) 
 #$REVISION = '1.013'; #dro# added Perl strict pragma; 
 #$VERSION = '1.012'; #dro# added public holiday support requested by TWiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by TWiki:Main.FranzJosefSilli
@@ -118,10 +118,12 @@ sub commonTagsHandler
 
     Foswiki::Func::writeDebug( "- ${pluginName}::commonTagsHandler( $_[2].$_[1] )" ) if $debug;
 
+    return if Foswiki::Func::getContext()->{'save'};
+
     # This is the place to define customized tags and variables
     # Called by Foswiki::handleCommonTags, after %INCLUDE:"..."%
 
-    #### eval is bad because Dakar works with exceptions
+    #### eval is bad because Foswiki works with exceptions
     ####eval {
 	    $_[0] =~ s/%HOLIDAYLIST%/&handleHolidaylist("", $_[0], $_[1], $_[2])/ge;
 	    $_[0] =~ s/%HOLIDAYLIST{(.*?)}%/&handleHolidaylist($1, $_[0], $_[1], $_[2])/ge;
@@ -1064,7 +1066,7 @@ sub renderHolidaylist() {
 				}
 			
 
-				# overwrite personal holidays with public holidays:
+				# override personal holidays with public holidays:
 				if ($options{enablepubholidays} && defined $$aptableref[$i]) {
 					$icon = $iconstates{$$aptableref[$i]};
 					$$itableref[$i]=$$aitableref[$i];
