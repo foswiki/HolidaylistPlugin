@@ -1,2 +1,2 @@
-Foswiki::Plugins::SmiliesPlugin,,perl,Required
-Date::Calc,,cpan,Required
+Foswiki::Plugins::SmiliesPlugin,>=0,perl,Required
+Date::Calc,>=0,cpan,Required
