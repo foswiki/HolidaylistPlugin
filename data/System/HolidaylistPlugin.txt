@@ -7,14 +7,14 @@ If you want to report an error in the topic, please raise a report at
 http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/HolidaylistPlugin
 -->
 <!--
-    * Set SHORTDESCRIPTION = %$SHORTDESCRIPTION%
+   * Set SHORTDESCRIPTION = %$SHORTDESCRIPTION%
 -->
 
 ---+!! %TOPIC%
 
 %SHORTDESCRIPTION%
 
-The !%TOPIC% handles the %<nop>HOLIDAYLIST</nop>% macro to insert a vacation list on the current page. Smilies are used to indicate if a person is in work or on holiday. 
+The %TOPIC% handles the %<nop>HOLIDAYLIST</nop>% macro to insert a vacation list on the current page. Smilies are used to indicate if a person is in work or on holiday. 
 
 The plugin creates a table filled with Smilies where today's date will be the first column. There is a row in the table for each person and each day is flagged as either: :mad: (in work), :ok: (a day off) or 8-) (absent for some time), :-I (not at work; used if you type a location). You can also use other smilies (like :skull:).
 
