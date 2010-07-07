@@ -14,7 +14,7 @@ http://develop.twiki.org/~twiki4/cgi-bin/view/Bugs/HolidaylistPlugin
 
 %SHORTDESCRIPTION%
 
-The !%TOPIC% handles the %<nop>HOLIDAYLIST</nop>% macro to inserts a vacation list on the current page. Smilies are used to indicate if a person is in work or on holiday. 
+The !%TOPIC% handles the %<nop>HOLIDAYLIST</nop>% macro to insert a vacation list on the current page. Smilies are used to indicate if a person is in work or on holiday. 
 
 The plugin creates a table filled with Smilies where today's date will be the first column. There is a row in the table for each person and each day is flagged as either: :mad: (in work), :ok: (a day off) or 8-) (absent for some time), :-I (not at work; used if you type a location). You can also use other smilies (like :skull:).
 
@@ -93,7 +93,7 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 
 *Notes and hints:*
 	* At least one space character have to stay before and after a seperator ('-'). This allows you to use a '-' in names, locations or icons, e.g. if you have a composite name like Eva-Maria.
-	* If you enable the compatmode (see [[#AttriButes][Attributes]]) you can use all event types of the Foswiki:Extensions.CalendarPlugin
+	* If you enable the =compatmode= (see [[#AttriButes][Attributes]]) you can use all event types of the Foswiki:Extensions.CalendarPlugin
 	* If you change the default language ('lang' attribute; see [[#AttriButes][Attributes]]) you can use your language specific month and day names or the abbreviations for any entry type (including Foswiki:Extensions.CalendarPlugin event types).
 	* If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can use it for your entries (including Foswiki:Extensions.CalendarPlugin event types).
 	* You can define a background color in a icon field or icon attribute (workicon, ...) if you write =color(&lt;MYCOLOR&gt;)=, e.g. =&nbsp;&nbsp;&nbsp;* 5 Mar 2009 - Green Entry - anywhere - color(green)=. It is also possible to combine icon and background color, e.g. =&nbsp;&nbsp;&nbsp;* 6 Mar 2009 - Red Entry - somewhere - color(red) :skull:=.
@@ -113,8 +113,8 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 		* 25 Dec 2005 - Christmas Day <!--@all-->
 </verbatim>
 
-You can also use the Foswiki:Extensions.CalDAVPlugin to recover calendars from
-a !CalDAV server.
+You can also use the Foswiki:Extensions.CalDAVPlugin to recover holiday
+calendars from a !CalDAV server.
 
 #AttriButes
 ---++ Attributes
@@ -310,7 +310,7 @@ The following settings are available as preferences:
   
 *Note:* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
----++ Plugin Installation Instructions
+---++ Installation Instructions
 
 %$INSTALL_INSTRUCTIONS%
 
