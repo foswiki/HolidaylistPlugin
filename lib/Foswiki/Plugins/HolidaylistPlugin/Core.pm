@@ -512,6 +512,13 @@ sub _handleDateRange {
     }
 }
 
+# Split a line consisting of fields separated by \s-\s, each field
+# with at least one whitespace either side.
+sub _fieldify {
+    my ($line, $lim) = @_;
+    return map { s/^\s+//; s/\s+$//; $_ } split(/\s\-\s/, $line, $lim);
+}
+
 sub _fetchHolidayList {
     my ($text) = @_;
     %table         = ();
@@ -542,8 +549,8 @@ sub _fetchHolidayList {
             || ( $line =~ m/^$monthyearrange_rx/ ) )
         {
             my ( $sdate, $edate );
-            ( $sdate, $edate, $person, $location, $icon ) = split /\s+\-\s+/,
-              $line, 5;
+            ( $sdate, $edate, $person, $location, $icon ) =
+              _fieldify($line, 5);
             ( $start, $end ) = ( _getDays( $sdate, 0 ), _getDays( $edate, 1 ) );
             next unless ( defined $start ) && ( defined $end );
 
@@ -553,7 +560,7 @@ sub _fetchHolidayList {
         }
         elsif ( ( $line =~ m/^$date_rx/ ) || ( $line =~ m/^$monthyear_rx/ ) ) {
             my $date;
-            ( $date, $person, $location, $icon ) = split /\s+\-\s+/, $line, 4;
+            ( $date, $person, $location, $icon ) = _fieldify($line, 4);
             ( $start, $end ) = ( _getDays( $date, 0 ), _getDays( $date, 1 ) );
             next unless ( defined $start ) && ( defined $end );
 
@@ -670,7 +677,7 @@ sub _handleCalendarEvents {
 
     if ( $line =~ m/^A\s+$date_rx/ ) {
         ### Yearly: A dd MMM yyyy
-        ( $strdate, $person, $location, $icon ) = split /\s+\-\s+/, $line, 4;
+        ( $strdate, $person, $location, $icon ) = _fieldify($line, 4);
         my ( $ptableref, $ltableref, $itableref ) = _getTableRefs($person);
         $strdate =~ s/^A\s+//;
         my ( $dd1, $mm1, $yy1 ) = split /\s+/, $strdate;
@@ -692,7 +699,7 @@ sub _handleCalendarEvents {
     }
     elsif ( $line =~ m/^$days_rx\s+($months_rx)/ ) {
         ### Interval: dd MMM
-        ( $strdate, $person, $location, $icon ) = split /\s+\-\s+/, $line, 4;
+        ( $strdate, $person, $location, $icon ) = _fieldify($line, 4);
         my ( $ptableref, $ltableref, $itableref ) = _getTableRefs($person);
         my ( $dd1, $mm1 ) = split /\s+/, $strdate;
         $mm1 = $months{$mm1};
@@ -715,7 +722,7 @@ sub _handleCalendarEvents {
         ### Monthly: w DDD
         ### Monthly: L DDD
 
-        ( $strdate, $person, $location, $icon ) = split /\s+\-\s+/, $line, 4;
+        ( $strdate, $person, $location, $icon ) = _fieldify($line, 4);
         my ( $ptableref, $ltableref, $itableref ) = _getTableRefs($person);
         my ( $n1, $dow1, $mm1 ) = split /\s+/, $strdate;
         $dow1 = $wdays{$dow1};
@@ -753,7 +760,7 @@ sub _handleCalendarEvents {
     }
     elsif ( $line =~ m/^$days_rx\s+\-/ ) {
         ### Monthly: dd
-        ( $strdate, $person, $location, $icon ) = split /\s+\-\s+/, $line, 4;
+        ( $strdate, $person, $location, $icon ) = _fieldify($line, 4);
         my ( $ptableref, $ltableref, $itableref ) = _getTableRefs($person);
         return if $strdate > 31;
         for ( my $i = 0 ; $i < $options{days} ; $i++ ) {
@@ -775,11 +782,10 @@ sub _handleCalendarEvents {
         my $strdate2 = undef;
         if ( $line =~ m/^E\s+($wdays_rx)\s+$daterange_rx/ ) {
             ( $strdate, $strdate2, $person, $location, $icon ) =
-              split /\s+\-\s+/, $line, 5;
+              _fieldify($line, 5);
         }
         else {
-            ( $strdate, $person, $location, $icon ) = split /\s+\-\s+/, $line,
-              4;
+            ( $strdate, $person, $location, $icon ) = _fieldify($line, 4);
         }
         my ( $ptableref, $ltableref, $itableref ) = _getTableRefs($person);
 
@@ -826,11 +832,10 @@ sub _handleCalendarEvents {
         my $strdate2 = undef;
         if ( $line =~ m/^E\d+\s+$daterange_rx/ ) {
             ( $strdate, $strdate2, $person, $location, $icon ) =
-              split /\s+\-\s+/, $line, 5;
+              _fieldify($line, 5);
         }
         else {
-            ( $strdate, $person, $location, $icon ) = split /\s+\-\s+/, $line,
-              4;
+            ( $strdate, $person, $location, $icon ) = _fieldify($line, 4);
         }
         my ( $ptableref, $ltableref, $itableref ) = _getTableRefs($person);
 
