@@ -320,9 +320,10 @@ The following settings are available as preferences:
 |  Version: | %$VERSION% |
 |  Release: | %$RELEASE% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  1.031 | Foswiki:Tasks.Item8548: split the plugin into a load-on-demand core module, and changed it to use a registered tag handler. Made it NO_PREFS_IN_TOPIC. Both changes for performance reasons. Changed the load method to expand includes in the same way as CalendarPlugin does (it would be good to share some code here). Foswiki:Tasks.Item1491: hacked/worked around problem with !EditTablePlugin by enabling the recursion block in that plugin. Tested for compatibility with !CalDAVPlugin and !EditTablePlugin - seems OK. |
+|  1.032 (20 Jul 2010) | Foswiki:Tasks.Item9361: Show correct smiley if comment is white space only |
+|  1.031 (07 Jul 2010) | Foswiki:Tasks.Item8548: Split the plugin into a load-on-demand core module, and changed it to use a registered tag handler. Made it NO_PREFS_IN_TOPIC. Both changes for performance reasons. Changed the load method to expand includes in the same way as CalendarPlugin does (it would be good to share some code here). Foswiki:Tasks.Item1491: hacked/worked around problem with !EditTablePlugin by enabling the recursion block in that plugin. Tested for compatibility with !CalDAVPlugin and !EditTablePlugin - seems OK. |
 |  1.030 (24 Nov 2009) | Foswiki:Main.DanielRohde: improved INCLUDE support requested by Foswiki:Main.IngoKappler; added multi language support for entry definitions; fixed unknown language bug; fixed performance issue reported by Foswiki:Main.IngoKappler (thx Foswiki:Main.MichaelDaum) | 
-|  1.029 (6 Mar 2009) | Foswiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |
+|  1.029 (06 Mar 2009) | Foswiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |
 |  1.026 (28 Oct 2008) | Foswiki:Main.DanielRohde: added missing anchor in showoptions form action; added row color feature (new attributes: namecolors, rowcolors); added order feature (new attribute: order); added namepos attribute (place names left and/or right of a row) |
 |  1.025 (17 Oct 2008) | Foswiki:Main.DanielRohde: added div tag with style overflow:auto requested by Matthew Thomson; added query parameters feature (hlp_&lt;attribute&gt; in URIs); added option form feature (new attributes: showoptions, optionspos, optionsformat) requested by Matthew Thomson; improved performance; fixed minor icon related bugs |
 |  1.024 (29 Jul 2008) | Foswiki:Main.DanielRohde: added statistics feature requested by Foswiki:Main.GarySprague |
@@ -330,26 +331,26 @@ The following settings are available as preferences:
 |  1.022 (18 Jun 2007) | Foswiki:Main.DanielRohde: added documentation requested by Foswiki:Main.PeterThoeny; fixed type (on=off bug) |
 |  1.021 (20 Apr 2007) | Foswiki:Main.DanielRohde: fixed minor HTML bug reported by Foswiki:Main.JfMacaud; added month header feature (showmonthheader attribute) requested by Rikard Johansson; fixed some minor bugs (documentation, preferences handling); |
 |  1.020 (21 Sep 2006) | Foswiki:Main.DanielRohde: added week attribute requested by Foswiki:Main.JanFilipsky; added tooltip to day headers; |
-|  1.019 (7 Aug 2006) | Foswiki:Main.DanielRohde: improved navigation; fixed %<nop>ICON% tag handling bug reported by Foswiki:Main.UlfJastrow; |
+|  1.019 (07 Aug 2006) | Foswiki:Main.DanielRohde: improved navigation; fixed %<nop>ICON% tag handling bug reported by Foswiki:Main.UlfJastrow; |
 |  1.018 (25 Jul 2006) | Foswiki:Main.DanielRohde: fixed periodic event bug; added navigation feature | 
 |  1.017 (31 May 2006) | Foswiki:Main.DanielRohde: fixed minor bug (periodic repeater) |
 |  1.016 (27 Apr 2006) | Foswiki:Main.DanielRohde: fixed some major bugs: deep recursion bug reported by Foswiki:Main.ChrisHausen; exception handling bug (concerns Foswiki) |
-|  1.015 (9 Feb 2006) | Foswiki:Main.DanielRohde: added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx Foswiki:Main.HaraldJoerg and Foswiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by Foswiki:Main.KennethLavrsen |
+|  1.015 (09 Feb 2006) | Foswiki:Main.DanielRohde: added class attribute (holidaylistPluginTable) to table tag for stylesheet support (thanx Foswiki:Main.HaraldJoerg and Foswiki:Main.ArthurClemens); fixed mod_perl preload bug (removed 'use warnings;') reported by Foswiki:Main.KennethLavrsen |
 |  1.014 (23 Jan 2006) | Foswiki:Main.DanielRohde: incorporated documentation fixes by Foswiki:Main.KennethLavrsen (Bugs:Item1440) | 
-|  1.013 (8 Nov 2005) | Foswiki:Main.DanielRohde: added Perl strict pragma; | 
-|  1.012 (5 Sep 2005): | Foswiki:Main.DanielRohde: added public holiday support requested by Foswiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by Foswiki:Main.FranzJosefSilli |
-|  1.011 (11 Jul 2005): | Foswiki:Main.DanielRohde: improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg |
-|  1.010 (5 Jul 2005): | Foswiki:Main.DanielRohde: added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation |
-|  1.009 (29 Jun 2005): | Foswiki:Main.DanielRohde: fixed major bug (!WikiNames and forced links in names) reported by Foswiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering |
-|  1.008 (23 Jun 2005): | Foswiki:Main.DanielRohde: added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in month attribute  |
-|  1.007 (17 Jun 2005): | Foswiki:Main.DanielRohde: personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug |
-|  1.006 (16 Jun 2005): | Foswiki:Main.DanielRohde: added new features (location support; today(fg/bg)color) |
-|  1.005 (16 Jun 2005): | Foswiki:Main.DanielRohde: added new features (start date support; weekendbgcolor); fixed documentation bugs; |
-|  1.004 (14 Jun 2005): | Foswiki:Main.DanielRohde: some performance improvements; code cleanup; documentation |
-|  1.003 (13 Jun 2005): | Foswiki:Main.DanielRohde: fix plugin preference handling; rename some subroutines |
-|  1.002 (13 Jun 2005): | Foswiki:Main.DanielRohde: renders some options; fixes some documentation bugs and a white space bug |
-|  1.001 (10 Jun 2005): | Foswiki:Main.DanielRohde: A complete reimplementation with many bug fixes and some new features. |
-|  1.021 (01 Jun 2005): | Foswiki:Main.PeterJones: Initial version |
+|  1.013 (08 Nov 2005) | Foswiki:Main.DanielRohde: added Perl strict pragma; | 
+|  1.012 (05 Sep 2005) | Foswiki:Main.DanielRohde: added public holiday support requested by Foswiki:Main.IlltudDaniel; improved documentation; improved forced link handling in alt/title attributes of img tags; fixed documentation bug reported by Foswiki:Main.FranzJosefSilli |
+|  1.011 (11 Jul 2005) | Foswiki:Main.DanielRohde: improved performance; fixed major periodic repeater bug; added parameter check; fixed flag parameter handling; allowed language specific month and day names for entries; fixed minor repeater bugs; added new attributes: monthnames, daynames, width, unknownparamsmsg |
+|  1.010 (05 Jul 2005) | Foswiki:Main.DanielRohde: added exception handling; added compatibility mode (new attributes: compatmode, compatmodeicon) with full CalendarPlugin event type support; added documentation |
+|  1.009 (29 Jun 2005) | Foswiki:Main.DanielRohde: fixed major bug (!WikiNames and forced links in names) reported by Foswiki:Main.KennethLavrsen; fixed documentation bugs; added INCLUDE expansion (for topics in topic attribute value); added name rendering |
+|  1.008 (23 Jun 2005) | Foswiki:Main.DanielRohde: added new attributes (nwidth,tcwidth,removeatwork,tablecaptionalign,headerformat); performance fixes; allowed digits in month attribute  |
+|  1.007 (17 Jun 2005) | Foswiki:Main.DanielRohde: personal icon support; new attributes (month,year); icon tooltips with dates/person/location/icon; fixed '-' bug |
+|  1.006 (16 Jun 2005) | Foswiki:Main.DanielRohde: added new features (location support; today(fg/bg)color) |
+|  1.005 (16 Jun 2005) | Foswiki:Main.DanielRohde: added new features (start date support; weekendbgcolor); fixed documentation bugs; |
+|  1.004 (14 Jun 2005) | Foswiki:Main.DanielRohde: some performance improvements; code cleanup; documentation |
+|  1.003 (13 Jun 2005) | Foswiki:Main.DanielRohde: fix plugin preference handling; rename some subroutines |
+|  1.002 (13 Jun 2005) | Foswiki:Main.DanielRohde: renders some options; fixes some documentation bugs and a white space bug |
+|  1.001 (10 Jun 2005) | Foswiki:Main.DanielRohde: A complete reimplementation with many bug fixes and some new features. |
+|  1.021 (01 Jun 2005) | Foswiki:Main.PeterJones: Initial version |
 |  Dependencies: | %$DEPENDENCIES% |
 |  License: | GPL ([[http://www.gnu.org/copyleft/gpl.html][GNU General Public License]]) |
 |  Home: | http://foswiki.org/Extensions/%TOPIC% |

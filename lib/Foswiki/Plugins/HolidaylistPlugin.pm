@@ -6,7 +6,7 @@ use warnings;
 
 # See plugin topic for complete release history
 our $VERSION = '$Rev: 18212 $';
-our $RELEASE = '1.031';
+our $RELEASE = '1.032';
 our $SHORTDESCRIPTION = 'Create a table with a list of people on holidays';
 our $NO_PREFS_IN_TOPIC = 1;
 
