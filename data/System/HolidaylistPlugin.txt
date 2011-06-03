@@ -320,7 +320,8 @@ The following settings are available as preferences:
 |  Version: | %$VERSION% |
 |  Release: | %$RELEASE% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
-|  1.032 (20 Jul 2010) | Foswiki:Tasks.Item9361: Show correct smiley if comment is white space only |
+|  1.033 (03 Jun 2011) | Add missing =topic= parameter. |
+|  1.032 (20 Jul 2010) | Foswiki:Tasks.Item9361: Show correct smiley if comment is white space only. |
 |  1.031 (07 Jul 2010) | Foswiki:Tasks.Item8548: Split the plugin into a load-on-demand core module, and changed it to use a registered tag handler. Made it NO_PREFS_IN_TOPIC. Both changes for performance reasons. Changed the load method to expand includes in the same way as CalendarPlugin does (it would be good to share some code here). Foswiki:Tasks.Item1491: hacked/worked around problem with !EditTablePlugin by enabling the recursion block in that plugin. Tested for compatibility with !CalDAVPlugin and !EditTablePlugin - seems OK. |
 |  1.030 (24 Nov 2009) | Foswiki:Main.DanielRohde: improved INCLUDE support requested by Foswiki:Main.IngoKappler; added multi language support for entry definitions; fixed unknown language bug; fixed performance issue reported by Foswiki:Main.IngoKappler (thx Foswiki:Main.MichaelDaum) | 
 |  1.029 (06 Mar 2009) | Foswiki:Main.DanielRohde: changed some defaults (showmonthheader, monthheaderformat, headerformat); fixed alignments (statistics, monthheader); added maxheight attribute; allowed color definitions in icon fields |

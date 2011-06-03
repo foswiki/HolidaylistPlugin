@@ -6,7 +6,7 @@ use warnings;
 
 # See plugin topic for complete release history
 our $VERSION = '$Rev: 18212 $';
-our $RELEASE = '1.032';
+our $RELEASE = '1.033';
 our $SHORTDESCRIPTION = 'Create a table with a list of people on holidays';
 our $NO_PREFS_IN_TOPIC = 1;
 
@@ -29,7 +29,7 @@ __END__
 Copyright (C) 2000-2003 Andrea Sterbini, a.sterbini@flashnet.it
 Copyright (C) 2001-2004 Peter Thoeny, peter@thoeny.com
 Copyright (C) 2005-2009 Daniel Rohde
-Copyright (C) 2008-2010 Foswiki Contributors
+Copyright (C) 2008-2011 Foswiki Contributors
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
