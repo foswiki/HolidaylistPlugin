@@ -6,21 +6,27 @@ use warnings;
 
 # See plugin topic for complete release history
 our $VERSION = '$Rev: 18212 $';
-our $RELEASE = '1.033';
+our $RELEASE = '2.000';
 our $SHORTDESCRIPTION = 'Create a table with a list of people on holidays';
 our $NO_PREFS_IN_TOPIC = 1;
+our $inited = 0;
 
 sub initPlugin {
     # my ( $topic, $web, $user, $installWeb ) = @_;
-    Foswiki::Func::registerTagHandler( 'HOLIDAYLIST', \&_HOLIDAYLIST );
+    Foswiki::Func::registerTagHandler( 'HOLIDAYLIST', sub {
+      initCore();
+      return Foswiki::Plugins::HolidaylistPlugin::Core::HOLIDAYLIST(@_);
+    });
+
+    $inited = 0;
     return 1;
 }
 
-sub _HOLIDAYLIST {
-    # my($session, $params, $topic, $web) = @_;
+sub initCore {
+    return if $inited;
+    $inited = 1;
     require Foswiki::Plugins::HolidaylistPlugin::Core;
-#    *_HOLIDAYLIST = \&Foswiki::Plugins::HolidaylistPlugin::Core::HOLIDAYLIST;
-    return Foswiki::Plugins::HolidaylistPlugin::Core::HOLIDAYLIST(@_);
+    Foswiki::Plugins::HolidaylistPlugin::Core::init();
 }
 
 1;

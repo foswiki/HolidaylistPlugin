@@ -2,4 +2,8 @@ data/System/HolidaylistPlugin.txt 0644 Documentation
 data/System/VarHOLIDAYLIST.txt 0644 Documentation
 lib/Foswiki/Plugins/HolidaylistPlugin.pm 0644 Perl module
 lib/Foswiki/Plugins/HolidaylistPlugin/Core.pm 0644 Perl module
-pub/System/HolidaylistPlugin/example.gif 0644 Example image
+pub/System/HolidaylistPlugin/example.png 0644 Example image
+pub/System/HolidaylistPlugin/hlp.css 0644
+pub/System/HolidaylistPlugin/hlp.css.gz 0644
+pub/System/HolidaylistPlugin/hlp.uncompressed.css 0644
+pub/System/HolidaylistPlugin/Makefile 0644

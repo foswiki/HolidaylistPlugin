@@ -61,15 +61,15 @@ our %locationtable;
 our %icontable;
 
 our %defaults = (
-    tableheadercolor => 'wheat',      # table header color
-    weekendbgcolor   => 'wheat',      # background color of weekend cells
+    tableheadercolor => 'transparent',      # table header color
+    weekendbgcolor   => '#eee',      # background color of weekend cells
     days             => 30,           # days to show
     lang             => 'English',    # language
     tablecaption     => '&nbsp;',     # table caption
-    cellpadding      => 1,            # table cellpadding
+    cellpadding      => 0,            # table cellpadding
     cellspacing      => 0,            # table cellspacing
-    border           => 1,            # table border
-    tablebgcolor     => 'white',      # table background color
+    border           => 0,            # table border
+    tablebgcolor     => 'transparent',      # table background color
     workicon         => '&nbsp;',     # on work icon (old behavior: ':mad:')
     holidayicon      => '8-)',        # on holiday icon
     adayofficon      => ':ok:',       # a day off icon
@@ -92,7 +92,7 @@ our %defaults = (
       0,    # removes names without calendar entries from table if set to "1"
     tablecaptionalign =>
       'top',    # table caption alignment (top|bottom|left|right)
-    headerformat => '<font size="-2">%a<br/>%e</font>',   # format of the header
+    headerformat => '%a<br/>%e',   # format of the header
     compatmode =>
       0,    # compatibility mode (allows all CalendarPlugin event types)
     compatmodeicon => ':-)',    # compatibility mode icon
@@ -100,19 +100,19 @@ our %defaults = (
     monthnames     => undef,    # month names (overrides lang attribute)
     width          => undef,    # table width
     unknownparamsmsg =>
-'%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see %SYSTEMWEB%.HolidayListPlugin topic for more details): %KNOWNPARAMSLIST%',
+'%RED% Sorry, some parameters are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR% <br/> Allowed parameters are (see %SYSTEMWEB%.HolidaylistPlugin topic for more details): %KNOWNPARAMSLIST%',
     enablepubholidays => 1,          # enable public holidays
     showpubholidays   => 0,          # show public holidays in a separate row
     pubholidayicon    => ':-)',      # public holiday icon
-    navnext           => '&gt;|',    # navigation button to the next n days
-    navnexthalf       => '&gt;',     # navigation button to the next n/2 days
+    navnext           => '%JQICON{"arrow_right"}%',    # navigation button to the next n days
+    navnexthalf       => '',     # navigation button to the next n/2 days
     navnexttitle     => 'Next %n day(s)',
     navnexthalftitle => 'Next %n day(s)',
-    navprev          => '<br/>|&lt;',     # navigation button to the last n days
-    navprevhalf => '&lt;',    # navigation button to the last n/2 days
+    navprev          => '%JQICON{"arrow_left"}%',     # navigation button to the last n days
+    navprevhalf      => '',    # navigation button to the last n/2 days
     navprevtitle       => 'Previous %n day(s)',
     navprevhalftitle   => 'Previous %n day(s)',
-    navhome            => '%d',
+    navhome            => '',
     navhometitle       => 'Go to the start date',
     navenable          => 1,
     navdays            => undef,
@@ -138,10 +138,10 @@ our %defaults = (
     showstatsum        => 1,
     statformat_perc    => '%3.1f%%',
     statformat_unknown => 'unknown',
-    optionsformat      => 'Month: %MONTHSEL, Year: %YEARSEL %BUTTON(Change)',
+    optionsformat      => '<table class="hlpNavJump"><tr><th>%MAKETEXT{"Month"}%:</th><td>%MONTHSEL</td><th>%MAKETEXT{"Year"}%:</th><td>%YEARSEL</td><td>%BUTTON(Jump)</td></tr></table>',
     showoptions        => 0,
     optionspos         => 'bottom',
-    rowcolors          => '#ffffff,#f0f0f0',
+    rowcolors          => 'transparent',
     namecolors         => undef,
     order              => undef,
     namepos            => 'left',
@@ -150,7 +150,7 @@ our %defaults = (
     topic              => undef
 );
 
-# reminder: don't forget change documentation (HolidayListPlugin topic) if you add a new rendered option
+# reminder: don't forget change documentation (HolidaylistPlugin topic) if you add a new rendered option
 my @renderedOptions = (
     'tablecaption', 'name',          'holidayicon',    'adayofficon',
     'workicon',     'notatworkicon', 'compatmodeicon', 'pubholidayicon'
@@ -168,20 +168,31 @@ my @flagOptions = (
 );
 
 use vars qw(
-  $theWeb $theTopic $attributes
   $startDays
   @processedTopics
   %rendererCache
+  $expanding
+  $hlid
 );
 
-our $expanding = 0;
-our $hlid      = 0;
+sub init {
+
+    # reset global vars 
+    # SMELL: what about the others
+    $expanding = 0;
+    $hlid = 0;
+
+    Foswiki::Func::addToZone("head", "HOLIDAYLISTPLUGIN::CSS", <<CSS);
+<link rel="stylesheet" href="%PUBURLPATH%/%SYSTEMWEB%/HolidaylistPlugin/hlp.css" media="all" /> 
+CSS
+}
 
 sub HOLIDAYLIST() {
     my ( $session, $attributes, $topic, $web ) = @_;
 
+    return '' unless Foswiki::Func::getContext()->{view};
     return '' if $expanding;
-    local $expanding = 1;
+    $expanding = 1;
 
     # Item1491: horrific hack to stop the EditTablePlugin eating it's own
     # feet.
@@ -311,7 +322,7 @@ sub _initOptions() {
         && ( defined $defaults{monthnames} )
         && ( $options{monthnames} ne $defaults{monthnames} ) )
     {
-        my @mn = split /\s*\|\s*/, $options{monthnames};
+        my @mn = split /\s*[\|,]\s*/, $options{monthnames};
         if ( $#mn == 11 ) {
             for ( my $i = 1 ; $i < 13 ; $i++ ) {
                 $months{ $mn[ $i - 1 ] } = $i;
@@ -426,7 +437,7 @@ sub getStartDate() {
                     : $options{'days'}
                 ) * $hlppage
             );
-            ( $yy, $mm, $dd ) = Add_Delta_Days( $yy, $mm, $dd, $days );
+            ( $yy, $mm, $dd ) = Add_Delta_YM( $yy, $mm, $dd, 0, $hlppage );
         }
     }
 
@@ -970,11 +981,8 @@ sub _renderHolidayList() {
     $text .= '<noautolink>' . CGI::a( { -name => 'hlpid' . $hlid }, "" );
     $text .= CGI::start_table(
         {
-            -class       => 'holidaylistPluginTable',
-            -border      => $options{border},
-            -cellpadding => $options{cellpadding},
-            -cellspacing => $options{cellspacing},
-            -bgcolor     => $options{tablebgcolor},
+            -class       => 'hlpTable',
+            -style       => "background-color:".$options{tablebgcolor},
             -width       => $options{width}
         }
     );
@@ -984,14 +992,13 @@ sub _renderHolidayList() {
 
     my $header   = "";
     my $namecell = "";
-    $namecell .= CGI::th(
-        {
-            -align   => 'left',
+    $namecell .= CGI::th({
+            -class   => "hlpNav",
             -width   => $options{nwidth},
             -rowspan => ( $options{showmonthheader} ? 2 : 1 )
         },
-        $options{name}
-          . (
+        "<div class='hlpResourceTitle'>".$options{name}."</div>".
+          (
               $options{'navenable'}
             ? &_renderNav(-1) . &_renderNav(0) . &_renderNav(1)
             : ''
@@ -1010,8 +1017,8 @@ sub _renderHolidayList() {
             $daysdiff = $restdays if ( $restdays - $daysdiff < 0 );
             $monthheader .= CGI::th(
                 {
+                    -class   => 'hlpMonthHeader',
                     -colspan => $daysdiff,
-                    -align   => 'center',
                     -title   => Month_to_Text($mm1) . ' ' . $yy1
                 },
                 _mystrftime( $yy1, $mm1, $dd1, $options{monthheaderformat} )
@@ -1026,10 +1033,8 @@ sub _renderHolidayList() {
             {
                 $monthheader .= CGI::th(
                     {
-                        -valign  => 'bottom',
-                        -align   => 'center',
+                        -class   => 'hlpStatsHeader',
                         rowspan  => 2,
-                        -bgcolor => $options{tableheadercolor}
                     },
                     $h
                 );
@@ -1044,16 +1049,20 @@ sub _renderHolidayList() {
         my $dow = Day_of_Week( $yy1, $mm1, $dd1 );
         my $date = Date_to_Days( $yy1, $mm1, $dd1 );
 
-        my $bgcolor = $options{tableheadercolor};
+        my $bgcolor;
         $bgcolor = $options{weekendbgcolor} unless $dow < 6;
         $bgcolor = $options{todaybgcolor}
           if ( defined $options{todaybgcolor} ) && ( $today == $date );
 
+        my $class = 'hlpDayHeader';
+        $class = 'hlpWeekendHeader' unless $dow < 6;
+        $class = 'hlpTodayHeader' if $today == $date;
+
         my %params = (
-            -align   => 'center',
-            -bgcolor => $bgcolor,
+            -class   => $class,
             -title   => Date_to_Text_Long( $yy1, $mm1, $dd1 )
         );
+        $params{style} = 'background-color:'.$bgcolor if defined $bgcolor;
         $params{-width} = $options{tcwidth}
           if ( ( defined $options{tcwidth} )
             && ( ( $dow < 6 ) || $options{showweekends} ) );
@@ -1068,27 +1077,18 @@ sub _renderHolidayList() {
         foreach my $h (
             split( /\|/, _getStatOption( 'statheader', 'statcolheader' ) ) )
         {
-            $header .= CGI::th(
-                {
-                    -valign  => 'bottom',
-                    -align   => 'center',
-                    -bgcolor => $options{tableheadercolor}
-                },
-                $h
-            );
+            $header .= CGI::th({ }, $h);
         }
 
     }
-    $text .= CGI::Tr(
-        { -bgcolor => $options{tableheadercolor} },
+    $text .= CGI::Tr({},
         ( $options{namepos} =~ /^(left|both)$/i ? $namecell : '' )
           . $monthheader
           . ( $options{namepos} =~ /^(right|both)$/i ? $namecell : '' )
       )
       . CGI::Tr($header)
       if $options{showmonthheader};
-    $text .= CGI::Tr(
-        { -bgcolor => $options{tableheadercolor} },
+    $text .= CGI::Tr({},
         ( $options{namepos} =~ /^(left|both)$/i ? $namecell : '' ) 
           . $header
           . ( $options{namepos} =~ /^(right|both)$/i ? $namecell : '' )
@@ -1146,8 +1146,7 @@ sub _renderHolidayList() {
         my $tr    = "";
         my $pcell = CGI::th(
             {
-                -align => 'left',
-                -style => 'white-space:nowrap;text-wrap:none;'
+                -class => 'hlpResourceHeader',
             },
             '<noautolink>' . _renderText( $person, $web ) . '</noautolink>'
         );
@@ -1157,11 +1156,18 @@ sub _renderHolidayList() {
             my ( $yy1, $mm1, $dd1 ) = Add_Delta_Days( $yy, $mm, $dd, $i );
             my $dow = Day_of_Week( $yy1, $mm1, $dd1 );
 
-            my $bgcolor = $rowcolor;
+            my $bgcolor;
+            my $class = 'hlpCell';
+
             $bgcolor = $options{weekendbgcolor} unless $dow < 6;
-            $bgcolor = $options{todaybgcolor}
-              if ( defined $options{todaybgcolor} )
-              && ( $today == Date_to_Days( $yy1, $mm1, $dd1 ) );
+            $class = 'hlpWeekend' unless $dow < 6;
+
+            if ( $today == Date_to_Days( $yy1, $mm1, $dd1 ) ) {
+              $class = 'hlpToday';
+              if ( defined $options{todaybgcolor} ) {
+                $bgcolor = $options{todaybgcolor};
+              }
+            }
 
             my $td = "";
 
@@ -1222,7 +1228,7 @@ sub _renderHolidayList() {
             $sumstatistics{'days-w'}++ if $dow < 6;
 
             my $title = _substTitle(
-                $person . ' / ' . Date_to_Text_Long( $yy1, $mm1, $dd1 ) );
+                $person . ' -- ' . Date_to_Text_Long( $yy1, $mm1, $dd1 ) );
             my $fgcolor = undef;
 
             if ( ( $dow < 6 ) || $options{showweekends} ) {
@@ -1294,26 +1300,30 @@ sub _renderHolidayList() {
                 }
 
                 my $location = $$ltableref[$i]{descr} if defined $ltableref;
-                if ( defined $location ) {
-                    $location =~ s/\s*(\@all|(fg)?color\([^\)]+\))//ig
-                      if $options{enablepubholidays};    # remove @all
-                    $location = _substTitle($location);
-                    $location = CGI::escapeHTML($location);
+                $title .= ": ".$$ltableref[$i]{location} if defined $ltableref && defined $$ltableref[$i]{location};
 
-                    $icon =~ s/<img /<img alt="$location" /is
-                      unless $icon =~
-                          s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
-                    $icon =~ s/<img /<img title="$location" /is
-                      unless $icon =~
-                          s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
-                    $title = $location if defined $location;
+                if ( defined $location ) {
+                   $location =~ s/\s*(\@all|(fg)?color\([^\)]+\))//ig
+                     if $options{enablepubholidays};    # remove @all
+                   $location = _substTitle($location);
+                   $location = CGI::escapeHTML($location);
+
+                # SMELL: this is broken somehow
+                #   $icon =~ s/<img /<img alt="$location" /is
+                #     unless $icon =~
+                #         s/(<img[^>]+alt=")[^">]+("[^>]*>)/$1$location$2/is;
+                #   $icon =~ s/<img /<img title="$location" /is
+                #     unless $icon =~
+                #         s/(<img[^>]+title=")[^">]+("[^>]*>)/$1$location$2/is;
                 }
                 if ( $icon =~ s/fgcolor\(([^\)]+)\)//g ) {
                     $fgcolor = $1;
                 }
                 if ( $icon =~ s/color\(([^\)]+)\)//g ) {
                     $bgcolor = $1;
-                    $td .= ( $icon !~ /^\s*$/ ) ? $icon : '&nbsp;';
+                }
+                if ( $icon =~ s/class\(([^\)]+)\)//g ) {
+                    $class = $1;
                 }
                 else {
                     $td .= $icon;
@@ -1324,9 +1334,8 @@ sub _renderHolidayList() {
             }
             $tr .= CGI::td(
                 {
-                    -align => 'center',
-                    -style => ( defined $fgcolor ? "color:$fgcolor;" : "" )
-                      . "background-color:$bgcolor;",
+                    -class => $class,
+                    -style => ( defined $fgcolor ? "color:$fgcolor;" : "" ) . (defined $bgcolor?"background-color:$bgcolor;" : ""),
                     -title => $title
                 },
                 $td
@@ -1335,7 +1344,9 @@ sub _renderHolidayList() {
         $tr .= _renderStatisticsCol( \%statistics )
           if ( $options{showstatcol} );
         $tr .= $pcell if $options{namepos} =~ /^(right|both)$/i;
-        $text .= CGI::Tr( { -bgcolor => $rowcolor }, $tr );
+        $text .= CGI::Tr( { 
+          -style => "background-color:".$rowcolor 
+        }, $tr );
     }
     $text .= _renderStatisticsRow( \%rowstatistics, \%sumstatistics )
       if ( $options{showstatrow} );
@@ -1349,9 +1360,8 @@ sub _renderHolidayList() {
 
     $text = CGI::div(
         {
-            -class => 'holidayListPluginDiv',
-            -style => 'overflow:auto;'
-              . (
+            -class => 'holidaylistPlugin',
+            -style => (
                 defined $options{maxheight}
                 ? "max-height:$options{maxheight}"
                 : ""
@@ -1431,6 +1441,11 @@ sub _substTitle {
     $title =~ s/\[\[/!\[\[/g;               # quote forced links - !!!unused
     $title =~ s/[A-Z][a-z0-9]+[\.\/]([A-Z])/$1/g;    # delete Web names
     ##$title =~ s/([A-Z][a-z]+\w*[A-Z][a-z0-9]+)/$1/g; # quote WikiNames
+
+    $title =~ s/(class|fgcolor|color)\(([^\)]+)\)//g; # remove view config
+    $title =~ s/\s*\-\s*$//; # remove trailing dashes
+    $title =~ s/X\s*{[^}]*}\s*//g; # remove excludes
+
     return $title;
 }
 
@@ -1617,14 +1632,15 @@ sub _renderStatisticsSumRow {
           unless defined $stattitle;
         my ( $txt, $t ) =
           _substStatisticsVars( $statcol, $stattitle, $sumstatisticsref );
-        $row .= $cgi->th( { -valign => 'top', -title => $t }, $txt );
+        $row .= $cgi->th( { -title => $t }, $txt );
     }
     $row .= $cgi->th('&nbsp;') if $options{namepos} =~ /^(right|both)$/i;
     my $colspan = $options{days};
     $colspan++ if $options{namepos} =~ /^(left|both)$/i;
-    $text .= $cgi->Tr(
-        { -bgcolor => $options{tableheadercolor} },
-        $cgi->th( { -colspan => $colspan, -align => 'right' }, '&nbsp;' ) . $row
+    $text .= $cgi->Tr({ 
+          -class => "hlpStatisticsSum"
+        },
+        $cgi->th( { -colspan => $colspan }, '&nbsp;' ) . $row
     );
 
     return $text;
@@ -1667,12 +1683,10 @@ sub _renderStatisticsRow {
             $style .= "background-color:$options{todaybgcolor};"
               if ( defined $options{todaybgcolor} ) && ( $date == $today );
             if ( ( $dow < 6 ) || ( $options{showweekends} ) ) {
-                $row .= $cgi->th(
+                $row .= $cgi->td(
                     {
                         -style  => $style,
                         -title  => $title,
-                        -valign => 'top',
-                        -align  => 'center'
                     },
                     $text
                 );
@@ -1704,7 +1718,6 @@ sub _renderStatisticsRow {
                         $sumstatisticsref );
                     $row .= $cgi->th(
                         {
-                            -valign  => "top",
                             -rowspan => $rowspan,
                             -title   => $t
                         },
@@ -1724,17 +1737,20 @@ sub _renderStatisticsRow {
         }
 
         $text .= $cgi->Tr(
-            { -bgcolor => $options{tableheadercolor} },
+            { 
+              -class => "hlpStatistics",
+              -style => "background-color:".$options{tableheadercolor} 
+            },
             (
                 $options{namepos} =~ /^(left|both)$/i
-                ? $cgi->th( { -align => 'right', -valign => 'top' },
+                ? $cgi->th( { },
                     $rowheader )
                 : ''
               )
               . $row
               . (
                 $options{namepos} =~ /^(right|both)$/i ? $cgi->th(
-                    { -align => 'left', -valign => 'top' }, $rowheader
+                    { }, $rowheader
                   ) : ''
               )
         );
@@ -1758,12 +1774,11 @@ sub _renderStatisticsCol {
           unless defined $statcoltitle;
         ( $statcol, $statcoltitle ) =
           _substStatisticsVars( $statcol, $statcoltitle, $statisticsref );
-        $text .= $cgi->th(
+        $text .= $cgi->td(
             {
-                -bgcolor => $options{tableheadercolor},
-                -class   => "hlpStatisticsColumn",
+                -class => "hlpStatsCell",
+                -style => "background-color:".$options{tableheadercolor},
                 -title   => $statcoltitle,
-                -align   => 'right'
             },
             $statcol
         );
@@ -1848,11 +1863,20 @@ sub _renderNav {
     $halftext = $options{'navnexthalf'} if $nextp == 1;
     $halftext = $options{'navprevhalf'} if $nextp == -1;
 
-    $nav .= $cgi->a( { -href => $halfhref, -title => $halftitle }, $halftext )
-      if ( $nextp == 1 );
-    $nav .= $cgi->a( { -href => $href,     -title => $title },     $text );
-    $nav .= $cgi->a( { -href => $halfhref, -title => $halftitle }, $halftext )
-      if ( $nextp == -1 );
+    my $class = 'hlpNavHome';
+    $class = 'hlpNavNext' if $nextp == 1;
+    $class = 'hlpNavPrev' if $nextp == -1;
+
+    my $halfClass = $nextp == 1 ? 'hlpNavHalfNext':'hlpNavHalfPrev';
+
+    $nav .= $cgi->a( { -class => $halfClass, -href => $halfhref, -title => $halftitle }, $halftext )
+      if ( $nextp == 1 ) && $halftext;
+
+    $nav .= $cgi->a( { -class => $class, -href => $href,     -title => $title }, $text )
+      if $text;
+
+    $nav .= $cgi->a( { -class => $halfClass, -href => $halfhref, -title => $halftitle }, $halftext )
+      if ( $nextp == -1 ) && $halftext;
 
     return $nav;
 }
@@ -1874,7 +1898,7 @@ sub _renderOptions {
             push @vals, ( $offs >= 0 ? '+' : '' ) . $offs;
         }
         $text =~
-s/\%\Q$what\EOFFS(\([^\)]*\))?/CGI::popup_menu(-title=>"\L$what\E offset",-name=>"hlp_\L$what\E_$hlid",-values=>\@vals, -default=>$options{lc($what)})/e;
+s/\%\Q$what\EOFFS(\([^\)]*\))?/CGI::popup_menu(-class=>"foswikiSelect", -title=>"\L$what\E offset",-name=>"hlp_\L$what\E_$hlid",-values=>\@vals, -default=>$options{lc($what)})/e;
     }
     while ( $text =~ /\%(WEEK|MONTH|YEAR)SEL(\(([^\)]*)\))?/ ) {
         my ( $what, $range ) = ( $1, $3 );
@@ -1890,17 +1914,17 @@ s/\%\Q$what\EOFFS(\([^\)]*\))?/CGI::popup_menu(-title=>"\L$what\E offset",-name=
         }
 
         $text =~
-s/\%\Q$what\ESEL(\([^\)]*\))?/CGI::popup_menu(-title=>"\L$what\E",-name=>"hlp_\L$what\E_$hlid",-values=>\@vals, -default=>$options{lc($what)})/e;
+s/\%\Q$what\ESEL(\([^\)]*\))?/CGI::popup_menu(-class=>"foswikiSelect", -title=>"\L$what\E",-name=>"hlp_\L$what\E_$hlid",-values=>\@vals, -default=>$options{lc($what)})/e;
     }
     while ( $text =~ /\%(STARTDATE|WEEK|MONTH|YEAR)(\(([^\)]*)\))?/ ) {
         my ( $what, $default ) = ( $1, $3 );
         $default = $options{ lc($what) } unless defined $default;
         $text =~
-s/\%\Q$what\E(\([^\)]*\))?/CGI::textfield(-title=>"\L$what\E",-name=>"hlp_\L$what\E_$hlid",-default=>$default)/e;
+s/\%\Q$what\E(\([^\)]*\))?/CGI::textfield(-class=>"foswikiTextField", -title=>"\L$what\E",-name=>"hlp_\L$what\E_$hlid",-default=>$default)/e;
     }
 
     $text =~
-s/%BUTTON(\(([^\)]*)\))?/CGI::submit(-name=>'hlp_change_'.$hlid,-value=>(defined $2?$2:'Change'))/eg;
+s/%BUTTON(\(([^\)]*)\))?/CGI::submit(-class=>'foswikiSubmit', -name=>'hlp_change_'.$hlid,-value=>(defined $2?$2:'Change'))/eg;
 
     $text =
         CGI::start_form( -action => "#hlpid$hlid", -method => 'get' ) 

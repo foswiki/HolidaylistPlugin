@@ -20,7 +20,7 @@ The plugin creates a table filled with Smilies where today's date will be the fi
 
 *Example (image):*
 <div style="overflow:auto">
-<img src="%ATTACHURLPATH%/example.gif" alt="Example" title="Example"  />
+<img src="%ATTACHURLPATH%/example.png" alt="Example" title="Example"  />
 </div>
 
 __WARNING__ As of version 1.031 of the plugin, it no longer supports
@@ -39,31 +39,31 @@ The syntax is described below ([[#SyntaX][Syntax]]).
 
 Example1: To list that John will be away on 1-July-2005
 <verbatim>
-	* 01 Jul 2005 - John
+   * 01 Jul 2005 - John
 </verbatim>
 Example2: To list that Mary will be away from 3-Sep - 9-Sep 2005
 <verbatim>
-	* 03 Sep 2005 - 09 Sep 2005 - Mary 
+   * 03 Sep 2005 - 09 Sep 2005 - Mary 
 </verbatim>
 Example3: To list that Jill will be in Paris from 10-Sep - 11-Sep 2005 and in Tokyo on 15 Sep 2005
 <verbatim>
-	* 10 Sep 2005 - 11 Sep 2005 - Jill - Paris
+   * 10 Sep 2005 - 11 Sep 2005 - Jill - Paris
 
-	* 15 Sep 2005 - Jill - Tokyo
+   * 15 Sep 2005 - Jill - Tokyo
 </verbatim>
 Example4: To list that Eve will be ill from 12-Sep - 20-Sep 2005  with her own 'smily'
 <verbatim>
-	* 12 Sep 2005 - 20 Sep 2005 - Eve - is ill - :skull: 
+   * 12 Sep 2005 - 20 Sep 2005 - Eve - is ill - :skull: 
 </verbatim>
 Example5: To list that Lisa will by not at work from April to June and the complete December 2005:
 <verbatim>
-	* Apr 2005 - Jun 2005 - Lisa
-	* Dec 2005 - Lisa
+   * Apr 2005 - Jun 2005 - Lisa
+   * Dec 2005 - Lisa
 </verbatim>
 
 Example6: To list in all time table entries that anybody will be not at work on Christmas Day:
 <verbatim>
-	* 25 Dec 2005 - Christmas Day @all
+   * 25 Dec 2005 - Christmas Day @all
 </verbatim>
 
 Example7: There are several attributes (see [[#AttriButes][Attributes]]) like =days= (defaults to 30days) and =tablecaption= (defaults to null). 
@@ -92,25 +92,25 @@ The syntax follows that of the !CalendarPlugin. See Foswiki:Extensions.CalendarP
 | Public Holidays | just type '@all' in the name field | ==&nbsp;* 25 Dec 2005 - Christmas Day @all== | 
 
 *Notes and hints:*
-	* At least one space character have to stay before and after a seperator ('-'). This allows you to use a '-' in names, locations or icons, e.g. if you have a composite name like Eva-Maria.
-	* If you enable the =compatmode= (see [[#AttriButes][Attributes]]) you can use all event types of the Foswiki:Extensions.CalendarPlugin
-	* If you change the default language ('lang' attribute; see [[#AttriButes][Attributes]]) you can use your language specific month and day names or the abbreviations for any entry type (including Foswiki:Extensions.CalendarPlugin event types).
-	* If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can use it for your entries (including Foswiki:Extensions.CalendarPlugin event types).
-	* You can define a background color in a icon field or icon attribute (workicon, ...) if you write =color(&lt;MYCOLOR&gt;)=, e.g. =&nbsp;&nbsp;&nbsp;* 5 Mar 2009 - Green Entry - anywhere - color(green)=. It is also possible to combine icon and background color, e.g. =&nbsp;&nbsp;&nbsp;* 6 Mar 2009 - Red Entry - somewhere - color(red) :skull:=.
-	* You can hide all calendar entries if you put them into HTML comments, e.g:
+   * At least one space character have to stay before and after a seperator ('-'). This allows you to use a '-' in names, locations or icons, e.g. if you have a composite name like Eva-Maria.
+   * If you enable the =compatmode= (see [[#AttriButes][Attributes]]) you can use all event types of the Foswiki:Extensions.CalendarPlugin
+   * If you change the default language ('lang' attribute; see [[#AttriButes][Attributes]]) you can use your language specific month and day names or the abbreviations for any entry type (including Foswiki:Extensions.CalendarPlugin event types).
+   * If you change the month names or day names ('monthnames' and 'daynames' attributes; see [[#AttriButes][Attributes]]) you can use it for your entries (including Foswiki:Extensions.CalendarPlugin event types).
+   * You can define a background color in a icon field or icon attribute (workicon, ...) if you write =color(&lt;MYCOLOR&gt;)=, e.g. =&nbsp;&nbsp;&nbsp;* 5 Mar 2009 - Green Entry - anywhere - color(green)=. It is also possible to combine icon and background color, e.g. =&nbsp;&nbsp;&nbsp;* 6 Mar 2009 - Red Entry - somewhere - color(red) :skull:=.
+   * You can hide all calendar entries if you put them into HTML comments, e.g:
 <verbatim>
-		%HOLIDAYLIST%
-		<!--
-			* 24 Dec 2005 - Sam - @home
-		-->
+%HOLIDAYLIST%
+<!--
+   * 24 Dec 2005 - Sam - @home
+-->
 </verbatim>
-	* You can put the entries to another topic and use the topic attribute, e.g:
+   * You can put the entries to another topic and use the topic attribute, e.g:
 <verbatim>
-		%HOLIDAYLIST{topic="TimeTableDataTopic" tablecaption="Planned Holidays (see TimeTableDataTopic)"}%
+%HOLIDAYLIST{topic="TimeTableDataTopic" tablecaption="Planned Holidays (see TimeTableDataTopic)"}%
 </verbatim>
-	* You can hide '@all' in an entry if you put it into HTML comments, e.g: 
+   * You can hide '@all' in an entry if you put it into HTML comments, e.g: 
 <verbatim>
-		* 25 Dec 2005 - Christmas Day <!--@all-->
+   * 25 Dec 2005 - Christmas Day <!--@all-->
 </verbatim>
 
 You can also use the Foswiki:Extensions.CalDAVPlugin to recover holiday
@@ -206,9 +206,9 @@ calendars from a !CalDAV server.
 | stattitle | statistics tooltip; overrides statrowtitle and statcoltitle | undefined / =stattitle="%{ll}"= |
 
 *Hints:* 
-	* You can use %SYSTEMWEB%.TextFormattingRules for some attribute values: tablecaption, name, holidayicon, adayofficon, workicon, notatworkicon, compatmodeicon, pubholidayicon
-	* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
-	* Every attribute can be overwritten by URI query parameters: =hlp_&lt;attribute&gt;= e.g. %SCRIPTURL%/view/%WEB%.%TOPIC%?hlp_startdate=+10#HolidaylistPluginExample
+   * You can use %SYSTEMWEB%.TextFormattingRules for some attribute values: tablecaption, name, holidayicon, adayofficon, workicon, notatworkicon, compatmodeicon, pubholidayicon
+   * Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
+   * Every attribute can be overwritten by URI query parameters: =hlp_&lt;attribute&gt;= e.g. %SCRIPTURL%/view/%WEB%.%TOPIC%?hlp_startdate=+10#HolidaylistPluginExample
 
 #StatisticsColumnFormat
 ---+++ Statistics Column/Row Format/Title
@@ -262,51 +262,60 @@ calendars from a !CalDAV server.
 #HolidaylistPluginExample
 ---++ Example
 
-%HOLIDAYLIST{startdate="1 Jun 2005" showstatrow="on" showstatcol="on" days="70" showoptions="on" namecolors="Bill:lightblue,Alice:#ffaaaa" showmonthheader="on" namepos="both"}%
+%HOLIDAYLIST{
+  startdate="1 Jun 2005" 
+  showstatrow="on" 
+  showstatcol="on" 
+  days="61" 
+  showoptions="on" 
+  showweekends="on" 
+  namecolors="Bill:#efffd8,Alice:#f2f7ff" 
+  showmonthheader="on" 
+}%
 
-	* 02 Jan 2005 - 28 Feb 2005 - Bill
-	* 27 Mar 2005 - 20 Apr 2005 - Bob
-	* 10 May 2005 - 01 Jun 2005 - Mary
-	* 13 Jun 2005 - 12 Jun 2006 - Jill's Motherhood 
-	* 08 Jun 2005 - Bill
-	* 10 Jun 2005 - 15 Jun 2005 - Bob
-	* 12 Jun 2005 - 14 Jun 2005 - Alice - Paris
-	* 17 Jun 2005 - Bob - is ill - :skull: color(red)
-	* 10 Jul 2005 - Mary
-	* 20 Jul 2005 - 02 Sep 2005 - Bob
-	* 15 Sep 2005 - 15 Oct 2005 - Mary
-	* 30 Oct 2005 - Jane
-	* 19 Nov 2005 - Bob
-	* 29 Nov 2005 - 20 Dec 2005 - Bill
-	* 25 Dec 2005 - Bob
-	* 6 Jun 2005 - 15 Jun 2005 - Kelly - Berlin - :-| color(red) fgcolor(white)
+   * 02 Jan 2005 - 28 Feb 2005 - Bill
+   * 27 Mar 2005 - 20 Apr 2005 - Bob
+   * 10 May 2005 - 01 Jun 2005 - Mary
+   * 13 Jun 2005 - 12 Jun 2006 - Jill's Motherhood 
+   * 08 Jun 2005 - Bill
+   * 10 Jun 2005 - 15 Jun 2005 - Bob
+   * 12 Jun 2005 - 14 Jun 2005 - Alice - Paris
+   * 17 Jun 2005 - Bob - is ill - color(#FBE3E4)
+   * 10 Jul 2005 - Mary
+   * 20 Jul 2005 - 02 Sep 2005 - Bob
+   * 15 Sep 2005 - 15 Oct 2005 - Mary
+   * 30 Oct 2005 - Jane
+   * 19 Nov 2005 - Bob
+   * 29 Nov 2005 - 20 Dec 2005 - Bill
+   * 25 Dec 2005 - Bob
+   * 6 Jun 2005 - 15 Jun 2005 - Kelly - Berlin - color(#0055b5) fgcolor(#fff)
 
 ---++ Settings
 
 The following settings are available as preferences:
-	* Days to show (default: 30)
-		* # Set HOLIDAYLISTPLUGIN_DAYS = 30
+   * Days to show (default: 30)
+      * # Set HOLIDAYLISTPLUGIN_DAYS = 30
 
-	* Language (default: English - see manual page of Date::Calc perl module, e.g: English, Deutsch, Fran&ccedil;ais, Espa&ntilde;ol, Nederlands, Dansk, suomi, ...). 
-		* # Set HOLIDAYLISTPLUGIN_LANG = Deutsch
+   * Language (default: English - see manual page of Date::Calc perl module, e.g: English, Deutsch, Fran&ccedil;ais, Espa&ntilde;ol, Nederlands, Dansk, suomi, ...). 
+      * # Set HOLIDAYLISTPLUGIN_LANG = Deutsch
 
-	* Content of the first cell (default: Name):
-		* # Set HOLIDAYLISTPLUGIN_NAME = Name
+   * Content of the first cell (default: Name):
+      * # Set HOLIDAYLISTPLUGIN_NAME = Name
 
-	* Set work icon (default: &amp;nbsp; - old behavior: =:<nop>mad:= ):
-		* # Set HOLIDAYLISTPLUGIN_WORKICON = :mad:
+   * Set work icon (default: &amp;nbsp; - old behavior: =:<nop>mad:= ):
+      * # Set HOLIDAYLISTPLUGIN_WORKICON = :mad:
 
-	* Set compatibility mode (default: 0; disables all Foswiki:Extensions.CalendarPlugin event types) and icon (default: =8<nop>-)=)
-		* # Set HOLIDAYLISTPLUGIN_COMPATMODE = 1
-		* # Set HOLIDAYLISTPLUGIN_COMPATMODEICON = 8-)
+   * Set compatibility mode (default: 0; disables all Foswiki:Extensions.CalendarPlugin event types) and icon (default: =8<nop>-)=)
+      * # Set HOLIDAYLISTPLUGIN_COMPATMODE = 1
+      * # Set HOLIDAYLISTPLUGIN_COMPATMODEICON = 8-)
 
-	* Set unknown parameter message (default: =%<nop>RED% Sorry, some parameters are unknown: %<nop>UNKNOWNPARAMSLIST% %<nop>ENDCOLOR% &lt;br/&gt; Allowed parameters are (see !%SYSTEMWEB%.HolidaylistPlugin topic for more details): %<nop>KNOWNPARAMSLIST%=)
-		* # Set HOLIDAYLISTPLUGIN_UNKNOWNPARAMSMSG = %RED% Following parameter(s) is/are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR%
+   * Set unknown parameter message (default: =%<nop>RED% Sorry, some parameters are unknown: %<nop>UNKNOWNPARAMSLIST% %<nop>ENDCOLOR% &lt;br/&gt; Allowed parameters are (see !%SYSTEMWEB%.HolidaylistPlugin topic for more details): %<nop>KNOWNPARAMSLIST%=)
+      * # Set HOLIDAYLISTPLUGIN_UNKNOWNPARAMSMSG = %RED% Following parameter(s) is/are unknown: %UNKNOWNPARAMSLIST% %ENDCOLOR%
 
-	* Enable/Disable public holiday support (default: 1; public holiday support is enabled), show public holidays as separate lines in table (default: 0; public holidays are not shown as separate rows in table); public holiday icon (default: =<nop>:-)=)
-		* # Set HOLIDAYLISTPLUGIN_ENABLEPUBHOLIDAYS = 1
-		* # Set HOLIDAYLISTPLUGIN_SHOWPUBHOLIDAYS = 0
-		* # Set HOLIDAYLISTPLUGIN_PUBHOLIDAYICON = :-)
+   * Enable/Disable public holiday support (default: 1; public holiday support is enabled), show public holidays as separate lines in table (default: 0; public holidays are not shown as separate rows in table); public holiday icon (default: =<nop>:-)=)
+      * # Set HOLIDAYLISTPLUGIN_ENABLEPUBHOLIDAYS = 1
+      * # Set HOLIDAYLISTPLUGIN_SHOWPUBHOLIDAYS = 0
+      * # Set HOLIDAYLISTPLUGIN_PUBHOLIDAYICON = :-)
   
 *Note:* Every attribute of %<nop>HOLIDAYLIST% can also be used as plugin setting. You only have to use capital letters.
 
@@ -320,6 +329,7 @@ The following settings are available as preferences:
 |  Version: | %$VERSION% |
 |  Release: | %$RELEASE% |
 |  Change History: | <!-- versions below in reverse order -->&nbsp; |
+|  2.000 (28 Nov 2011) | Foswiki:Main.MichaelDaum: a more professional look&feel; fixed some persistent-perl gotchas |
 |  1.033 (03 Jun 2011) | Add missing =topic= parameter. |
 |  1.032 (20 Jul 2010) | Foswiki:Tasks.Item9361: Show correct smiley if comment is white space only. |
 |  1.031 (07 Jul 2010) | Foswiki:Tasks.Item8548: Split the plugin into a load-on-demand core module, and changed it to use a registered tag handler. Made it NO_PREFS_IN_TOPIC. Both changes for performance reasons. Changed the load method to expand includes in the same way as CalendarPlugin does (it would be good to share some code here). Foswiki:Tasks.Item1491: hacked/worked around problem with !EditTablePlugin by enabling the recursion block in that plugin. Tested for compatibility with !CalDAVPlugin and !EditTablePlugin - seems OK. |
@@ -357,4 +367,4 @@ The following settings are available as preferences:
 |  Home: | http://foswiki.org/Extensions/%TOPIC% |
 |  Support: | http://foswiki.org/Support/%TOPIC% |
 
-%META:FILEATTACHMENT{name="example.gif" attr="h" comment="Example" date="1119006048" path="example.gif" size="15447" user="rohdedan" version="1.1"}%
+%META:FILEATTACHMENT{name="example.png" attr="h" comment="Example" date="1119006048" path="example.png" size="15447" user="ProjectContributor" version="1"}%

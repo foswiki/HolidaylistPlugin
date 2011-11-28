@@ -1,0 +1,135 @@
+/* reset in case it is missing */
+.hlpTable,
+.hlpTable tr,
+.hlpTable th,
+.hlpTable td {
+  border:0;
+  border-spacing:0px;
+  outline:0;
+  padding:0;
+  background:transparent;
+  text-align:left;
+  vertical-align:top;
+  font-weight:normal;
+}
+
+.hlpTable {
+  border:1px solid #bcbcbc;
+  -webkit-box-shadow: 0px 1px 5px #bcbcbc;
+     -moz-box-shadow: 0px 1px 5px #bcbcbc;
+          box-shadow: 0px 1px 5px #bcbcbc;
+  margin:5px;
+}
+.hlpTable th,
+.hlpTable td {
+  padding:5px;
+}
+.holidaylistPlugin {
+  overflow:auto;
+}
+.hlpResourceHeader {
+  white-space:nowrap;
+  text-wrap:none;
+}
+.hlpTable .hlpResourceTitle,
+.hlpTable .hlpResourceHeader,
+.hlpTable .hlpMonthHeader {
+  font-weight:bold;
+}
+.hlpResourceHeader a {
+  text-decoration:none;
+  color:#444;
+}
+.hlpResourceHeader a:hover {
+  color:#fff;
+}
+.hlpTable .hlpStatsHeader,
+.hlpTable .hlpDayHeader,
+.hlpTable .hlpTodayHeader,
+.hlpTable .hlpWeekendHeader {
+  border-bottom:1px solid #bcbcbc;
+  color:gray;
+}
+.hlpTable .hlpNav {
+  border-bottom:1px solid #bcbcbc;
+}
+.hlpTable .hlpDayHeader,
+.hlpTable .hlpTodayHeader,
+.hlpTable .hlpWeekendHeader {
+  font-size:0.95em;
+}
+.hlpNavJump {
+  margin:1em 4px;
+}
+.hlpNavJump td,
+.hlpNavJump th {
+  padding:.1538em .5769em .1538em 0;
+}
+
+.hlpTable .hlpNav {
+}
+
+.hlpNavHome,
+.hlpNavNext,
+.hlpNavHalfNext,
+.hlpNavPrev,
+.hlpNavHalfPrev {
+  text-decoration:none;
+  margin-right:5px;
+}
+
+.hlpWeekend,
+.hlpWeekendHeader {
+  background-color:#eee;
+}
+.hlpTodayHeader font {
+  color:#599E00;
+  background: #efffd8;
+}
+.holidaylistPlugin .hlpToday {
+  border-width:1px;
+  color:#fff;
+}
+.holidaylistPlugin .blue {
+  color:#fff;
+  background:#0055b5;
+}
+.holidaylistPlugin .yellow {
+  background:#F5DA57;
+  color:#D5A03C;
+}
+.holidaylistPlugin .red {
+  background:#b22222;
+  color:#fff;
+}
+.hlpHover {
+  background-color:#E6F5D0;
+  color:#599E00;
+}
+
+.hlpCell,
+.hlpWeekend,
+.hlpDayHeader,
+.hlpWeekendHeader {
+  text-align:center;
+}
+
+.hlpStatistics th,
+.hlpStatistics td {
+  font-size:0.95em;
+  border-top:1px solid #bcbcbc;
+  color:gray;
+}
+.hlpStatistics td {
+  text-align:center;
+}
+.hlpTable .hlpStatsHeader {
+  vertical-align:bottom;
+  text-align:right;
+}
+.hlpTable .hlpStatsCell {
+  text-align:right;
+  border-left:1px solid #bcbcbc;
+  border-right:1px solid #bcbcbc;
+  color:gray;
+}
