@@ -191,8 +191,8 @@ sub HOLIDAYLIST() {
     my ( $session, $attributes, $topic, $web ) = @_;
 
     return '' unless Foswiki::Func::getContext()->{view};
-    return '' if $expanding;
-    $expanding = 1;
+    return '' if $expanding;	# don't evaluate %HOLIDAYLIST%
+    local $expanding = 1;	# while expanding the event list
 
     # Item1491: horrific hack to stop the EditTablePlugin eating it's own
     # feet.
