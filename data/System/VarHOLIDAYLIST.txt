@@ -1,4 +1,4 @@
-%META:TOPICINFO{author="ProjectContributor" date="1181040969" format="1.1" version="$Rev$"}%
+%META:TOPICINFO{author="ProjectContributor" date="1407719185" format="1.1" version="1"}%
 %META:TOPICPARENT{name="Macros"}%
 #VarHOLIDAYLIST
 ---+++ HOLIDAYLIST -- add a vacation list to a topic
