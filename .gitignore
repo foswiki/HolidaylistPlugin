@@ -1,0 +1,11 @@
+*.gz
+pub/System/HolidaylistPlugin/hlp.css
+*.swp
+igp_*
+HolidaylistPlugin.md5
+HolidaylistPlugin.sha1
+HolidaylistPlugin.tgz
+HolidaylistPlugin.txt
+HolidaylistPlugin.zip
+HolidaylistPlugin_installer
+HolidaylistPlugin_installer.pl

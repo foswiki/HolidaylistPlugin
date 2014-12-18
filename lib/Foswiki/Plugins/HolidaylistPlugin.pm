@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 # See plugin topic for complete release history
-our $VERSION           = '$Rev: 18212 $';
+our $VERSION           = '2.001';
 our $RELEASE           = '2.001';
 our $SHORTDESCRIPTION  = 'Create a table with a list of people on holidays';
 our $NO_PREFS_IN_TOPIC = 1;
